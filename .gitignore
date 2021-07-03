@@ -1,0 +1,7 @@
+secrets.json
+env
+.ipynb_checkpoints
+__pycache__
+data
+models
+output
