@@ -11,6 +11,7 @@ ntc = 50
 class Generator(nn.Module):
     def __init__(self, image_content_types):
         super(Generator, self).__init__()
+        self.n_img_cont_types = len(image_content_types)
         self.image_conv = nn.Sequential(
             # input is Z, going into a convolution
             nn.utils.parametrizations.spectral_norm(
@@ -50,17 +51,9 @@ class Generator(nn.Module):
             # state size. (nc) x 128 x 128
         )
         
-        self.image_classify = nn.Sequential(
-            nn.Linear(nz, ntc),
-            nn.ReLU(True),
-            nn.Linear(ntc, len(image_content_types)),
-            nn.Sigmoid()
-        )
-
     def forward(self, input):
         generated_image = self.image_conv(input)
-        image_class = self.image_classify(input.view((-1, nz)))
-        return generated_image, image_class
+        return generated_image, input.view((-1, nz))[:,-self.n_img_cont_types:]
 
 # Size of feature maps in discriminator
 ndf = 64
