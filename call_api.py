@@ -36,7 +36,7 @@ device = torch.device("cuda:0")
 image_content_types = ['Leaf', 'Flower', 'Entire', 'Fruit', 'Stem']
 
 netG = gan_model_definitions.Generator(image_content_types)
-netG.load_state_dict(torch.load("models/128x128_tmp.pkl"))
+netG.load_state_dict(torch.load("models/256x256.pkl"))
 netG.to(device)
 netG.eval()
 
@@ -48,7 +48,6 @@ def create_noise():
         noise,
         torch.tensor(random_content_types).view((1, len(image_content_types), 1, 1)).to(device)
     ), dim = 1).float()
-
 
 with torch.no_grad():
     img_class, noise = create_noise()
